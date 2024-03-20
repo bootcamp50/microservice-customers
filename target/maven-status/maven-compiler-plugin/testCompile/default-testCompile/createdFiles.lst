@@ -1,0 +1,3 @@
+com\nttdata\microservice\bankcustomers\ApplicationTests.class
+com\nttdata\microservice\bankcustomers\controllers\PersonControllerTest.class
+com\nttdata\microservice\bankcustomers\services\impl\PersonServiceImplTest.class

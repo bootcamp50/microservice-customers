@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: microservice-customers
+  cloud:
+    config:
+      enabled: true
+      label: main
+      uri: http://bank-config:8888
+      
