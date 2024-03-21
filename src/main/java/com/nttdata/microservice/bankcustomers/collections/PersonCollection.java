@@ -1,6 +1,5 @@
 package com.nttdata.microservice.bankcustomers.collections;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.bson.types.ObjectId;
@@ -8,14 +7,16 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Document(value = "persons")
-public class PersonCollection implements Serializable {
+public class PersonCollection {
 
 	@Id
 	private ObjectId id;
@@ -24,14 +25,11 @@ public class PersonCollection implements Serializable {
 	private String personType;
 	
 	//ENTERPRISE
-	private String ruc;
-	private String companyName;
+	private EnterpriseInfo enterpriseInfo; 
 	
 	//PERSONAL
-	private String firstName;
-	private String lastName;
-	private String typeDocument;
-	private String numberDocument;
+	private PersonalInfo personalInfo;
+
 	private String comment;
 	
 	private String state;

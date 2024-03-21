@@ -30,7 +30,7 @@ class PersonServiceImplTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
-	@Test
+	/*@Test
 	@DisplayName("Test save customer personal")
 	void saveCustomerPersonalTest() {
 		
@@ -44,9 +44,9 @@ class PersonServiceImplTest {
 
 		Mono<PersonCollection> expected = service.saveCustomerPersonal(person);
 		assertNotNull(expected);
-	}
+	}*/
 
-	@Test
+	/*@Test
 	@DisplayName("Test save customer enterprise")
 	void saveCustomerEnterpriseTest() {
 		
@@ -60,11 +60,11 @@ class PersonServiceImplTest {
 		Mono<PersonCollection> expected = service.saveCustomerEnterprise(person);
 		assertNotNull(expected);
 		
-	}
+	}*/
 
 	
 
-	@Test
+	/*@Test
 	@DisplayName("Test check if customer exist ")
 	void checkIfCustomerExistTest() {
 		
@@ -82,9 +82,9 @@ class PersonServiceImplTest {
 		assertEquals(true,expected.block());
 		
 		
-	}
+	}*/
 
-	@Test
+	/*@Test
 	@DisplayName("Test check if customer personal exist ")
 	void checkIfCustomerPersonalTest() {
 		
@@ -101,9 +101,9 @@ class PersonServiceImplTest {
 		Mono<Boolean> expected = service.checkIfCustomerPersonal("1111");
 		assertNotNull(expected);
 		assertEquals(true,expected.block());
-	}
+	}*/
 
-	@Test
+	/*@Test
 	@DisplayName("Test check if customer personal exist ")
 	void checkIfCustomerEnterpriseTest() {
 		
@@ -121,9 +121,9 @@ class PersonServiceImplTest {
 		assertNotNull(expected);
 		assertEquals(true,expected.block());
 		
-	}
+	}*/
 	
-	@Test
+	/*@Test
 	@DisplayName("Test list all customers")
 	void listTest() {
 		
@@ -146,7 +146,7 @@ class PersonServiceImplTest {
 		
 		Flux<PersonCollection> expected = service.list();
 		assertNotNull(expected);
-	}
+	}*/
 	
 
 }

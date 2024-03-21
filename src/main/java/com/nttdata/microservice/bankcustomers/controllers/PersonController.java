@@ -1,6 +1,8 @@
 package com.nttdata.microservice.bankcustomers.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,14 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nttdata.microservice.bankcustomers.collections.PersonCollection;
-import com.nttdata.microservice.bankcustomers.dto.EnterpriseDto;
-import com.nttdata.microservice.bankcustomers.dto.PersonalDto;
+import com.nttdata.microservice.bankcustomers.dto.PersonDto;
+import com.nttdata.microservice.bankcustomers.exceptions.CustomerDuplicatedException;
 import com.nttdata.microservice.bankcustomers.services.IPersonService;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
+@Slf4j
 @RequestMapping(value = "/person")
 public class PersonController {
 	
@@ -24,57 +28,33 @@ public class PersonController {
 	private IPersonService personService;
 
 	@GetMapping(value = "/getCustomers")
-	public Flux<PersonCollection> getCustomers() throws Exception{
+	public Flux<PersonDto> getCustomers() throws Exception{
 		return personService.list();
 	}
 	
-	@PostMapping(value = "/saveCustomerPersonal")
-	public Mono<PersonCollection> saveCustomerPersonal(@RequestBody PersonalDto dto) throws Exception{
-		PersonCollection collection = new PersonCollection();
-		collection.setFirstName(dto.getFirstName());
-		collection.setLastName(dto.getLastName());
-		collection.setNumberDocument(dto.getNumberDocument());
-		collection.setTypeDocument(dto.getTypeDocument());
-		return personService.saveCustomerPersonal(collection);
+	@PostMapping(value = "/saveCustomer")
+	public Mono<ResponseEntity<PersonCollection>> saveCustomer(@RequestBody PersonDto dto){
+		log.info("save customer");
+        return personService.create(dto)
+                .flatMap(createdCustomer -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer)))
+                .onErrorResume(CustomerDuplicatedException.class, error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).build()))
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
 	}
 	
-	@PostMapping(value = "/saveCustomerEnterprise")
-	public Mono<PersonCollection> saveCustomerEnterprise(@RequestBody EnterpriseDto dto) throws Exception{
-		PersonCollection collection = new PersonCollection();
-		collection.setCompanyName(dto.getCompanyName());
-		collection.setRuc(dto.getRuc());
-		return personService.saveCustomerEnterprise(collection);
-	}
+	@GetMapping("/getCustomer/{id}")
+    public Mono<ResponseEntity<PersonDto>> findCustomerById(@PathVariable("id") String id) {
+        log.info("Get operation in /getCustomer/{}", id);
+        return personService.findById(id)
+                .flatMap(retrievedCustomer -> Mono.just(ResponseEntity.ok(retrievedCustomer)))
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+    }
 	
-	@GetMapping("/checkIfCustomerExist/{code}")
-	public Mono<Boolean> checkIfCustomerExist(@PathVariable("code") String code)
-			throws Exception {
-		return personService.checkIfCustomerExist(code);
-	}
-	
-	@GetMapping("/checkIfCustomerPersonal/{code}")
-	public Mono<Boolean> checkIfCustomerPersonal(@PathVariable("code") String code)
-			throws Exception {
-		return personService.checkIfCustomerPersonal(code);
-	}
-	
-	@GetMapping("/checkIfCustomerEnterprise/{code}")
-	public Mono<Boolean> checkIfCustomerEnterprise(@PathVariable("code") String code)
-			throws Exception {
-		return personService.checkIfCustomerEnterprise(code);
-	}
-	
-	@GetMapping("/getByCode/{code}")
-	public Mono<String> getByCode(@PathVariable("code") String code)
-			throws Exception {
-		return personService.findByCode(code);
-	}
-	
-	@GetMapping("/getByCodeCached/{code}")
-	public Mono<String> getByCodeCached(@PathVariable("code") String code)
-			throws Exception {
-		return personService.findByCodeCached(code);
-	}
-	
+	@GetMapping("/getCustomerCached/{id}")
+    public Mono<ResponseEntity<PersonDto>> findCustomerByIdCached(@PathVariable("id") String id) {
+        log.info("Get operation in /getCustomer/{}", id);
+        return personService.findByIdCached(id)
+                .flatMap(retrievedCustomer -> Mono.just(ResponseEntity.ok(retrievedCustomer)))
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+    }
 	
 }

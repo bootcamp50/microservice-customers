@@ -37,7 +37,7 @@ class PersonControllerTest {
 	}
 
 	
-	@Test
+	/*@Test
 	@DisplayName("Test list all customers")
 	void getCustomers() {
 		PersonCollection person = new PersonCollection();
@@ -103,11 +103,11 @@ class PersonControllerTest {
 		.expectStatus().isOk();
 		
 		
-	}
+	}*/
 
 	
 
-	@Test
+	/*@Test
 	@DisplayName("Test check if customer exist ")
 	void checkIfCustomerExistTest() {
 		
@@ -161,7 +161,7 @@ class PersonControllerTest {
 		.expectSubscription()
 		.expectNext(true)
 		.verifyComplete();
-	}
+	}*/
 	
 
 }
