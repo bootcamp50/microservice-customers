@@ -51,7 +51,7 @@ public class PersonController {
 	
 	@GetMapping("/getCustomerCached/{id}")
     public Mono<ResponseEntity<PersonDto>> findCustomerByIdCached(@PathVariable("id") String id) {
-        log.info("Get operation in /getCustomer/{}", id);
+        log.info("Get operation in /getCustomerCached/{}", id);
         return personService.findByIdCached(id)
                 .flatMap(retrievedCustomer -> Mono.just(ResponseEntity.ok(retrievedCustomer)))
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));

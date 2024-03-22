@@ -125,7 +125,7 @@ public class PersonServiceImpl implements IPersonService{
 	public Mono<PersonDto> findByIdCached(String id) {
 		return repository.findById(new ObjectId(id)).flatMap(collection -> {
 			return Mono.just(utils.toPersonDto(collection));
-		});
+		}).cache();
 	}
 	
 }

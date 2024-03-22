@@ -17,5 +17,8 @@ public class PersonalInfo {
 	private String lastName;
 	private String typeDocument;
 	private String numberDocument;
+	private String email;
+    private String phoneNumber;
+    private String mobileNumber;
 
 }

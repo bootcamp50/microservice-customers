@@ -11,8 +11,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.nttdata.microservice.bankcustomers.collections.PersonCollection;
+import com.nttdata.microservice.bankcustomers.collections.enums.PersonStateEnum;
 import com.nttdata.microservice.bankcustomers.collections.enums.PersonTypeEnum;
+import com.nttdata.microservice.bankcustomers.dto.PersonDto;
 import com.nttdata.microservice.bankcustomers.repository.IPersonRepository;
+import com.nttdata.microservice.bankcustomers.utils.PersonUtils;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,27 +27,35 @@ class PersonServiceImplTest {
 	
 	@Mock
 	IPersonRepository repository;
+	
+	@Mock
+	PersonUtils util;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 	}
 
-	/*@Test
+	@Test
 	@DisplayName("Test save customer personal")
 	void saveCustomerPersonalTest() {
 		
-		PersonCollection person = new PersonCollection();
-		person.setFirstName("Nombre");
-		person.setLastName("Apellido");
-		person.setNumberDocument("123456");
-		Mono<PersonCollection> personMono = Mono.just(person);
+		PersonCollection personCollection = new PersonCollection();
+		personCollection.setPersonType(PersonTypeEnum.PERSONAL.toString());
+		personCollection.setState(PersonStateEnum.ACTIVE.toString());
+		Mono<PersonCollection> personCollectionMono = Mono.just(personCollection);
 		
-		when(repository.save(person)).thenReturn(personMono);
+		PersonDto person = new PersonDto();
+		person.setPersonType(PersonTypeEnum.PERSONAL.toString());
+		person.setState(PersonStateEnum.ACTIVE.toString());
+		
+		when(repository.save(personCollection)).thenReturn(personCollectionMono);
+		when(repository.findAll()).thenReturn(Flux.empty());
+		when(util.toPersonCollection(person)).thenReturn(personCollection);
 
-		Mono<PersonCollection> expected = service.saveCustomerPersonal(person);
+		Mono<PersonCollection> expected = service.create(person);
 		assertNotNull(expected);
-	}*/
+	}
 
 	/*@Test
 	@DisplayName("Test save customer enterprise")

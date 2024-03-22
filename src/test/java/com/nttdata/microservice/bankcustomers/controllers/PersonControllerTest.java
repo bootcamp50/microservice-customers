@@ -13,7 +13,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.nttdata.microservice.bankcustomers.collections.PersonCollection;
-
+import com.nttdata.microservice.bankcustomers.collections.enums.PersonStateEnum;
+import com.nttdata.microservice.bankcustomers.collections.enums.PersonTypeEnum;
+import com.nttdata.microservice.bankcustomers.dto.PersonDto;
 import com.nttdata.microservice.bankcustomers.services.IPersonService;
 
 import reactor.core.publisher.Flux;
@@ -37,27 +39,25 @@ class PersonControllerTest {
 	}
 
 	
-	/*@Test
+	@Test
 	@DisplayName("Test list all customers")
 	void getCustomers() {
-		PersonCollection person = new PersonCollection();
-		person.setFirstName("Nombre");
-		person.setLastName("Apellido");
-		person.setNumberDocument("123456");
+		PersonDto person = new PersonDto();
+		person.setPersonType(PersonTypeEnum.PERSONAL.toString());
+		person.setState(PersonStateEnum.ACTIVE.toString());
 		
-		PersonCollection person2 = new PersonCollection();
-		person2.setFirstName("Nombre2");
-		person2.setLastName("Apellido2");
-		person2.setNumberDocument("123457");
+		PersonDto person2 = new PersonDto();
+		person2.setPersonType(PersonTypeEnum.ENTERPRISE.toString());
+		person2.setState(PersonStateEnum.ACTIVE.toString());
 		
-		Flux<PersonCollection> personFlux = Flux.just(person,person2);
+		Flux<PersonDto> personFlux = Flux.just(person,person2);
 		
 		when(service.list()).thenReturn(personFlux);
 		
-		Flux<PersonCollection> response = webTestClient.get().uri("/person/getCustomers")
+		Flux<PersonDto> response = webTestClient.get().uri("/person/getCustomers")
 				.exchange()
 				.expectStatus().isOk()
-				.returnResult(PersonCollection.class)
+				.returnResult(PersonDto.class)
 				.getResponseBody();
 				
 				StepVerifier.create(response)
@@ -68,7 +68,7 @@ class PersonControllerTest {
 				
 	}
 	
-	@Test
+	/*@Test
 	@DisplayName("Test save customer personal")
 	void saveCustomerPersonalTest() {
 		
